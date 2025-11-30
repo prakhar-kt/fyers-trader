@@ -1,6 +1,7 @@
 from fyers_apiv3 import fyersModel
 import webbrowser
 import os
+import json
 
 redirect_uri = os.getenv("REDIRECT_URI")
 client_id = os.getenv("CLIENT_ID")
@@ -33,9 +34,19 @@ except Exception as e:
 
 fyers = fyersModel.FyersModel(client_id=client_id, 
                               token=access_token,
-                              log_path="./")
+                              log_path="logs/")
 
 response = fyers.get_profile()
 print("profile details", response)
 
+# Save credentials to JSON file
+os.makedirs("creds", exist_ok=True)
+credentials = {
+    "client_id": client_id,
+    "access_token": access_token
+}
+with open("creds/credentials.json", "w") as f:
+    json.dump(credentials, f, indent=2)
+
+print("credentials saved successfully")
 
